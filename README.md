@@ -586,3 +586,8 @@ createplot_accuracy_triest(g4_triest_accuracy, 'Triest for G4',M_values_g4,27666
 createplot_accuracy_triest(g5_triest_accuracy, 'Triest for G5',M_values_g5,5021410)  
 ```
 
+![Project Logo](images/G1-TRIEST.png)
+![Project Logo](images/G2-TRIEST.png)
+![Project Logo](images/G3-TRIEST.png)
+![Project Logo](images/G4-TRIEST.png)
+![Project Logo](images/G5-TRIEST.png)
