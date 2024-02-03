@@ -12,6 +12,7 @@ Additionally, the project involves implementing the DOULION algorithm, which spa
 
 - [Overview](#overview)
 - [Libraries](#Libraries)
+- [Graph Datasets](#Graph-datasets)
 - [Exact Algorithms](#exact-algorithms)
   - [All Triplets](#all-triplets)
   - [Node Iterator](#node-iterator)
