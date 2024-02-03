@@ -478,5 +478,111 @@ createplot_related_error(rel_err_g4, dcf_speedup_g4, 'Doulion And Compact Forwar
 
 ### TRIEST for Edge Insertions
 
-Introduce the streaming algorithm for incremental graph edge processing, focusing on the TRIEST algorithm specifically tailored for edge insertions. Highlight any limitations or special use cases.
+Implementing the Triest algorithm
+
+```
+def update_counters(sample, u, v, t, globalT, localT, M):
+    # Update the global and local counters based on the new edge (u, v)
+    neighbors_u = set(sample.neighbors(u)) if sample.has_node(u) else set()
+    neighbors_v = set(sample.neighbors(v)) if sample.has_node(v) else set()
+
+    common_neighbors = neighbors_u.intersection(neighbors_v)
+
+    for w in common_neighbors:
+        if random.random() <= M / t:
+            globalT += 1
+            localT[u] = localT.get(u, 0) + 1
+            localT[v] = localT.get(v, 0) + 1
+            localT[w] = localT.get(w, 0) + 1
+
+    return globalT, localT
+```
+```
+def sample_edge(sample, u, v, t, M):
+    # Sample the edge (u, v) into the graph with probability M/t
+    if random.random() <= M / t:
+        return True
+    return False
+```
+```
+def triest_edge_insertion(file_path, M):
+
+    globalT = 0
+    localT = {}
+    t = 0
+    sample = nx.Graph()
+
+    with open(file_path, 'r') as f:
+        for line in f:
+            t += 1
+            u, v = map(int, line.strip().split())
+
+            # Update counters and sample edge
+            globalT, localT = update_counters(sample, u, v, t, globalT, localT, M)
+            if sample_edge(sample, u, v, t, M):
+                sample.add_edge(u, v)
+
+    return globalT, localT
+```
+```
+def triest(file_path,triangles, M_values):
+    triest_accuracy_list = []
+    # Example usage:
+    graph = file_path  # Replace with the actual path to your graph file
+
+
+    for M in M_values:
+        global_triangles, local_triangles = triest_edge_insertion(graph, M)
+        triest_accuracy = global_triangles / triangles
+        print(f"M={M}: Global Triangle Count: {global_triangles}")
+        #print(f"M={M}: Local Triangle Counts: {local_triangles}")
+        print(f"M={M}: Accuracy: {triest_accuracy}")
+        print("-------------------------------------------------")
+        triest_accuracy_list.append(triest_accuracy)
+    return triest_accuracy_list
+```
+```
+M_values_g1 = [8800, 17600, 26400, 35200, 44000, 52800, 61600, 70400, 79200, 88234]  # Experiment with different values of M
+g1_triest_accuracy = triest('facebook_combined.txt',triangles_g1, M_values_g1)
+M_values_g2 = [9350, 18700, 28050, 37400, 46750, 56100, 65450, 74800, 84150, 93497]  # Experiment with different values of M
+g2_triest_accuracy = triest('CA-CondMat.txt',triangles_g2, M_values_g2)
+M_values_g3 = [92587, 185174, 277761, 370348, 462935, 555522, 648109, 740696, 833283, 925872]  # Experiment with different values of M
+g3_triest_accuracy = triest('roadNet-CA.txt',triangles_g3, M_values_g3)
+M_values_g4 = [277660, 555320, 832980, 1110640, 1388300, 1665960, 1943620, 2221280, 2498940, 2766607]  # Experiment with different values of M
+g4_triest_accuracy = triest('com-amazon.ungraph.txt',triangles_g4, M_values_g4)
+```
+
+## Plotting metrics
+
+```
+def createplot_accuracy_triest(accuracy,alg,M,edges):
+  plt.figure(figsize=(8, 5))
+  percentage = []
+  for value in M:
+    percentage.append((value / edges)*100)
+  plt.scatter(accuracy,percentage)
+
+  for acc, perc in zip(accuracy, percentage):
+        adjusted_acc = acc + 0.005  # You can adjust this value based on your preference
+        adjusted_perc = perc - 0.005  # You can adjust this value based on your preference
+        plt.text(adjusted_acc, adjusted_perc, f'{acc:.3f}', fontsize=8, verticalalignment='top', horizontalalignment='left')
+  plt.scatter
+  plt.xlabel('Accuracy', fontsize=16)
+  plt.ylabel("% of total edges", fontsize=16)
+
+  plt.title(alg, fontsize=18)
+  plt.xticks(fontsize=14)
+  plt.yticks(fontsize=14)
+  plt.savefig(alg+"_GRQC.png", bbox_inches='tight',dpi=300) #saving the current figure (plot) as an image file.
+  #plt.savefig(alg+"_roadCA.png", bbox_inches='tight',dpi=300)
+  #plt.savefig(alg+"_CondMat.png", bbox_inches='tight',dpi=300)
+  plt.show()
+```
+```
+createplot_accuracy_triest(g1_triest_accuracy, 'Triest for G1',M_values_g1,88234)  
+createplot_accuracy_triest(g2_triest_accuracy, 'Triest for G2',M_values_g2,93497)
+createplot_accuracy_triest(g3_triest_accuracy, 'Triest for G3',M_values_g3,925872)
+createplot_accuracy_triest(g4_triest_accuracy, 'Triest for G4',M_values_g4,2766607)
+createplot_accuracy_triest(g5_triest_accuracy, 'Triest for G5',M_values_g5,5021410)  
+```
 
