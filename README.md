@@ -417,7 +417,62 @@ createplot_accuracy(acc_g4, dni_speedup_g4, 'Doulion And Node Iterator for G4',c
 createplot_accuracy(acc_g4, dcf_speedup_g4, 'Doulion And Compact Forward for G4',custom_labels) #plot speedup for Compact Forward
 ```
 
-![Project Logo](images/logo.png)
+![Project Logo](images/G1-NI.png)
+![Project Logo](images/G2-NI.png)
+![Project Logo](images/G3-NI.png)
+![Project Logo](images/G4-NI.png)
+
+![Project Logo](images/G1-CF.png)
+![Project Logo](images/G2-CF.png)
+![Project Logo](images/G3-CF.png)
+![Project Logo](images/G4-CF.png)
+
+Creating plots of speedup-related error.
+
+```
+def createplot_related_error(rel_error, speedup, alg, custom_labels):
+  plt.figure(figsize=(8, 5))
+  plt.scatter(rel_error,speedup)
+
+    # Add custom labels to points
+  if custom_labels:
+    for label, x, y in zip(custom_labels, rel_error, speedup):
+        # Adjust the coordinates for a bit down and to the right
+        adjusted_x = x + 0.0005  # You can adjust this value based on your preference
+        adjusted_y = y - 0.0005  # You can adjust this value based on your preference
+        plt.text(adjusted_x, adjusted_y, label, fontsize=12, ha='left', va='top')
+  plt.scatter
+  plt.xlabel('Related_Error', fontsize=16)
+  plt.ylabel("Speedup", fontsize=16)
+  plt.title(alg, fontsize=18)
+  plt.xticks(fontsize=14)
+  plt.yticks(fontsize=14)
+  plt.savefig(alg+"_GRQC.png", bbox_inches='tight',dpi=300) #saving the current figure (plot) as an image file.
+  #plt.savefig(alg+"_roadCA.png", bbox_inches='tight',dpi=300)
+  #plt.savefig(alg+"_CondMat.png", bbox_inches='tight',dpi=300)
+  plt.show()
+```
+
+```
+createplot_related_error(rel_err_g1, dni_speedup_g1, 'Doulion And Node Iterator for G1',custom_labels) #plot speedup for NodeIterator
+createplot_related_error(rel_err_g1, dcf_speedup_g1, 'Doulion And Compact Forward for G1',custom_labels) #plot speedup for Compact Forward
+createplot_related_error(rel_err_g2, dni_speedup_g2, 'Doulion And Node Iterator for G2',custom_labels) #plot speedup for NodeIterator
+createplot_related_error(rel_err_g2, dcf_speedup_g2, 'Doulion And Compact Forward for G2',custom_labels) #plot speedup for Compact Forward
+createplot_related_error(rel_err_g3, dni_speedup_g3, 'Doulion And Node Iterator for G3',custom_labels) #plot speedup for NodeIterator
+createplot_related_error(rel_err_g3, dcf_speedup_g3, 'Doulion And Compact Forward for G3',custom_labels) #plot speedup for Compact Forward
+createplot_related_error(rel_err_g4, dni_speedup_g4, 'Doulion And Node Iterator for G4',custom_labels) #plot speedup for NodeIterator
+createplot_related_error(rel_err_g4, dcf_speedup_g4, 'Doulion And Compact Forward for G4',custom_labels) #plot speedup for Compact Forward
+```
+
+![Project Logo](images/G1-NI-REL.png)
+![Project Logo](images/G2-NI-REL.png)
+![Project Logo](images/G3-NI-REL.png)
+![Project Logo](images/G4-NI-REL.png)
+
+![Project Logo](images/G1-CF-REL.png)
+![Project Logo](images/G2-CF-REL.png)
+![Project Logo](images/G3-CF-REL.png)
+![Project Logo](images/G4-CF-REL.png)
 
 ## Streaming Algorithm
 
